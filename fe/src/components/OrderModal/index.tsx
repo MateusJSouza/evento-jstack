@@ -34,7 +34,7 @@ export function OrderModal({ visible, order }: OrderModalProps) {
               </span>
               <strong>
                 {order.status === 'WAITING' && 'Fila de espera'}
-                {order.status === 'IN_PRODUCTION' && 'Em produção'}
+                {order.status === 'IN_PRODUCTION' && 'Em preparação'}
                 {order.status === 'DONE' && 'Pronto!'}
               </strong>
             </div>
