@@ -36,7 +36,7 @@ export function Orders() {
       <OrdersBoard
         icon="🕒"
         title="Fila de espera"
-        orders={[]}
+        orders={orders}
       />
       <OrdersBoard
         icon="👩‍🍳"
