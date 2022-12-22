@@ -1,6 +1,7 @@
 import { ModalBody, OrderDetails, Overlay } from './styles';
 import closeIcon from '../../assets/images/close-icon.svg';
 import { Order } from '../../types/Order';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 interface OrderModalProps {
   visible: boolean;
@@ -56,7 +57,7 @@ export function OrderModal({ visible, order }: OrderModalProps) {
 
                   <div className="product-details">
                     <strong>{product.name}</strong>
-                    <span>{product.price}</span>
+                    <span>{formatCurrency(product.price)}</span>
                   </div>
                 </div>
               ))}
