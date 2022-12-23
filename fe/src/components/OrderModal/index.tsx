@@ -14,6 +14,21 @@ export function OrderModal({ visible, order }: OrderModalProps) {
     return null;
   }
 
+  /*
+    FORMA 1 DE FAZER A CONTAGEM DO TOTAL DE PRODUTOS COM O FOREACH
+    let total = 0;
+
+    // Pegando o valor que já tem dentro do total e somando a ele o resultado da expressão
+    order.products.forEach(({ product, quantity }) => {
+      total += (product.price * quantity);
+    });
+  */
+
+  // O valor do accumulator é o valor que nós retornamos na execução anterior dessa função
+  const total = order.products.reduce((total, { quantity, product }) => {
+    return total + (product.price * quantity);
+  }, 0);
+
   return (
     <>
       <Overlay>
@@ -61,6 +76,11 @@ export function OrderModal({ visible, order }: OrderModalProps) {
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div className="total">
+              <span>Total</span>
+              <strong>{formatCurrency(total)}</strong>
             </div>
           </OrderDetails>
         </ModalBody>

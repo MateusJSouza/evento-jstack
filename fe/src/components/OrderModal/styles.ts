@@ -55,20 +55,21 @@ export const ModalBody = styled.div`
 export const OrderDetails = styled.div`
   margin-top: 2rem;
 
-  strong {
+  & + strong {
     font-weight: 500;
     font-size: .875rem;
     opacity: 0.8;
   }
 
   .order-items {
-    margin-top: 16px;
+    margin-top: 1rem;
 
     .item {
       display: flex;
 
-      & > .item {
-        margin-top: 16px;
+      /* Sempre que eu tiver um item que é precedido por outro item, o margin-top será aplicado */
+      & + .item {
+        margin-top: 1rem;
       }
 
       img {
@@ -76,11 +77,11 @@ export const OrderDetails = styled.div`
       }
 
       .quantity {
-        font-size: 14px;
+        font-size: .875rem;
         color: #666;
         display: block; // um bloco, como se fosse uma div
-        min-width: 20px;
-        margin-left: 12px;
+        min-width: 1.25rem;
+        margin-left: .75rem;
       }
 
       .product-details {
@@ -88,14 +89,29 @@ export const OrderDetails = styled.div`
 
         strong {
           display: block;
-          margin-bottom: 4px;
+          font-weight: 700;
+          color: #333333;
+          margin-bottom: .25rem;
         }
 
         span {
-          font-size: 14px;
+          font-size: .875rem;
           color: #666;
         }
       }
+    }
+  }
+
+  .total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+
+    span {
+      font-weight: 500;
+      font-size: 14px;
+      opacity: 0.8;
     }
   }
 `;
