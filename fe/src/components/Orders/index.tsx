@@ -10,21 +10,21 @@ const orders: Order[] = [
     'products': [
       {
         'product': {
-          'name': 'Pizza quatro queijos',
-          'imagePath': '1668472896991-quatro-queijos.png',
-          'price': 40,
+          'name': 'X-Egg',
+          'imagePath': '1671826254164-chicken.png',
+          'price': 15,
         },
         'quantity': 3,
-        '_id': '6372e48cbcd195b0d3d0f7f4'
+        '_id': '63a60bab27ef60a5e3f913c7'
       },
       {
         'product': {
           'name': 'Coca cola',
-          'imagePath': '1668473462705-coca-cola.png',
-          'price': 7,
+          'imagePath': '1671827843107-coca-cola.png',
+          'price': 6,
         },
         quantity: 2,
-        '_id': '6372e48cbcd195b0d3d0f7f5'
+        '_id': '63a61183559b3693331e62c7'
       }
     ],
   }
