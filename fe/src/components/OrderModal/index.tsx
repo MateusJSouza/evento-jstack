@@ -2,13 +2,15 @@ import { Actions, ModalBody, OrderDetails, Overlay } from './styles';
 import closeIcon from '../../assets/images/close-icon.svg';
 import { Order } from '../../types/Order';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { useEffect } from 'react';
 
 interface OrderModalProps {
   visible: boolean;
   order: Order | null;
+  onClose: () => void;
 }
 
-export function OrderModal({ visible, order }: OrderModalProps) {
+export function OrderModal({ visible, order, onClose }: OrderModalProps) {
   // Se visible for igual a false ou não tiver o order, então este componente não será renderizado
   if (!visible || !order) {
     return null;
@@ -29,13 +31,30 @@ export function OrderModal({ visible, order }: OrderModalProps) {
     return total + (product.price * quantity);
   }, 0);
 
+  // Fechando o modal a partir da tecla "Esc" do teclado
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      // Se a tecla 'Esc' for clicada, é chamada a função onClose para fechar o modal
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    }
+    // Adicionando o evento de tecla e passando a função para ser monitorada
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Removendo o evento quando a função já não for mais chamada
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
     <>
       <Overlay>
         <ModalBody>
           <header>
             <strong>{order.table}</strong>
-            <button type="button">
+            <button type="button" onClick={onClose}>
               <img src={closeIcon} alt="Ícone de fechar o modal" />
             </button>
           </header>
