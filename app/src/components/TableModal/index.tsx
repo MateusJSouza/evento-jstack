@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Modal, TouchableOpacity } from 'react-native';
 import { isAndroid } from '../../utils/isAndroid';
 import { Button } from '../Button';
@@ -7,10 +8,26 @@ import { Text } from '../Text';
 
 import { Form, Header, Input, ModalBody, Overlay } from './styles';
 
-export function TableModal() {
+interface TableModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onSave: (table: string) => void;
+}
+
+export function TableModal({ visible, onClose, onSave }: TableModalProps) {
+  const [table, setTable] = useState('');
+
+  // Fechando modal e salvando o número da mesa
+  function handleSaveModal() {
+    onSave(table);
+    onClose();
+  }
+
   return (
     <Modal
+      visible={visible}
       transparent
+      animationType='fade'
     >
       {/* O 'padding' empurra as coisas para cima quando o teclado é ativado */}
       <Overlay behavior={isAndroid ? 'height' : 'padding'}>
@@ -18,7 +35,7 @@ export function TableModal() {
           <Header>
             <Text weight="600">Informe a mesa</Text>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onClose}>
               <Close color="#666" />
             </TouchableOpacity>
           </Header>
@@ -28,8 +45,12 @@ export function TableModal() {
               placeholder='Número da mesa'
               placeholderTextColor="#666"
               keyboardType='number-pad'
+              onChangeText={setTable}
             />
-            <Button onPress={() => alert('Salvou')}>
+            <Button
+              onPress={handleSaveModal}
+              disabled={table.length === 0}
+            >
                 Salvar
             </Button>
           </Form>
