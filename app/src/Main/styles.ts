@@ -1,8 +1,7 @@
 import styled from 'styled-components/native';
-import { Platform, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 
-// Identifica em qual plataforma estamos desenvolvendo
-const isAndroid = Platform.OS === 'android';
+import { isAndroid } from '../utils/isAndroid';
 
 // Configurando área segura para o Android
 export const Container = styled.SafeAreaView`
