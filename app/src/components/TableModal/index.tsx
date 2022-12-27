@@ -19,6 +19,7 @@ export function TableModal({ visible, onClose, onSave }: TableModalProps) {
 
   // Fechando modal e salvando o número da mesa
   function handleSaveModal() {
+    setTable('');
     onSave(table);
     onClose();
   }
