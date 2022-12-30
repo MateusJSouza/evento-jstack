@@ -29,7 +29,7 @@ export function Main() {
   const [selectedTable, setSelectedTable] = useState('');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isLoading] = useState(false);
-  const [products] = useState<Product[]>([]);
+  const [products] = useState<Product[]>(mockProducts);
 
   function handleSaveTable(table: string) {
     setSelectedTable(table);
