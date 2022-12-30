@@ -69,10 +69,13 @@ export function Main() {
 
       if(item.quantity === 1) {
 
+        // Removendo item do carrinho caso ele só tiver uma unidade
         newCartItems.splice(itemIndex, 1);
 
         return newCartItems;
       }
+
+      // Decrementando item do carrinho
       newCartItems[itemIndex] = {
         ...item,
         quantity: item.quantity - 1,
