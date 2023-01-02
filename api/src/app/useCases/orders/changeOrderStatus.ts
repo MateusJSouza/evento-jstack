@@ -7,7 +7,7 @@ export async function changeOrderStatus(req: Request, res: Response) {
 		const { status } = req.body; // Status do pedido
 
 		// Verificando se o status está dentro do array de espera, em produção ou feito
-		if (['WAITING', 'IN_PRODUCTION', 'DONE'].includes(status)) {
+		if (!['WAITING', 'IN_PRODUCTION', 'DONE'].includes(status)) {
 			return res.status(400).json({
 				error: 'Status should be one of these: WAITING, IN_PRODUCTION or DONE',
 			})
