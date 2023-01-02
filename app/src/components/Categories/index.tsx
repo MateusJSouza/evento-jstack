@@ -8,14 +8,17 @@ import { CategoryContainer, Icon } from './styles';
 
 interface CategoriesProps {
   categories: Category[];
+  onSelectCategory: (categoryId: string) => Promise<void>;
 }
 
-export function Categories({ categories }: CategoriesProps) {
+export function Categories({ categories, onSelectCategory }: CategoriesProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   function handleSelectCategory(categoryId: string) {
     // Se o estado atual é igual a categoria que foi clicada, se foi, ele vai voltar pro estado inicial, se não foi, o usuário selecionou outra categoria
     const category = selectedCategory === categoryId ? '' : categoryId;
+
+    onSelectCategory(category);
     setSelectedCategory(category);
   }
 
