@@ -8,11 +8,10 @@ export function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    api.get('/orders')
-      .then(({ data }) => {
-        setOrders(data);
-      });
-  }, []);
+    api.get('/orders').then(({ data }) => {
+      setOrders(data);
+    });
+  }, [orders]);
 
   const waiting = orders.filter((order) => order.status === 'WAITING');
   const inProduction = orders.filter((order) => order.status === 'IN_PRODUCTION');
@@ -23,6 +22,12 @@ export function Orders() {
     setOrders((prevState) => prevState.filter(order => order._id !== orderId));
   }
 
+  function handleOrderStatusChange(orderId: string, status: Order['status']) {
+    setOrders((prevState) => prevState.map((order) => (
+      order._id === orderId ? { ...order, status } : order
+    )));
+  }
+
   return (
     <Container>
       <OrdersBoard
@@ -30,18 +35,21 @@ export function Orders() {
         title="Fila de espera"
         orders={waiting}
         onCancelOrder={handleCancelOrder}
+        onChangeOrderStatus={handleOrderStatusChange}
       />
       <OrdersBoard
         icon="👩‍🍳"
         title="Em preparação"
         orders={inProduction}
         onCancelOrder={handleCancelOrder}
+        onChangeOrderStatus={handleOrderStatusChange}
       />
       <OrdersBoard
         icon="✅"
         title="Pronto!"
         orders={done}
         onCancelOrder={handleCancelOrder}
+        onChangeOrderStatus={handleOrderStatusChange}
       />
     </Container>
   );

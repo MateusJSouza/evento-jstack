@@ -1,18 +1,28 @@
-import { Actions, ModalBody, OrderDetails, Overlay } from './styles';
-import closeIcon from '../../assets/images/close-icon.svg';
+import { useEffect } from 'react';
+
 import { Order } from '../../types/Order';
 import { formatCurrency } from '../../utils/formatCurrency';
-import { useEffect } from 'react';
+
+import { Actions, ModalBody, OrderDetails, Overlay } from './styles';
+import closeIcon from '../../assets/images/close-icon.svg';
 
 interface OrderModalProps {
   visible: boolean;
+  isLoading: boolean;
   order: Order | null;
   onClose: () => void;
   onCancelOrder: () => Promise<void>;
-  isLoading: boolean;
+  onChangeOrderStatus: () => void;
 }
 
-export function OrderModal({ visible, order, onClose, onCancelOrder, isLoading }: OrderModalProps) {
+export function OrderModal({
+  visible,
+  order,
+  onClose,
+  onCancelOrder,
+  isLoading,
+  onChangeOrderStatus
+}: OrderModalProps) {
   // Se visible for igual a false ou não tiver o order, então este componente não será renderizado
   if (!visible || !order) {
     return null;
@@ -55,7 +65,7 @@ export function OrderModal({ visible, order, onClose, onCancelOrder, isLoading }
       <Overlay>
         <ModalBody>
           <header>
-            <strong>{order.table}</strong>
+            <strong>Mesa {order.table}</strong>
             <button type="button" onClick={onClose}>
               <img src={closeIcon} alt="Ícone de fechar o modal" />
             </button>
@@ -106,23 +116,46 @@ export function OrderModal({ visible, order, onClose, onCancelOrder, isLoading }
           </OrderDetails>
 
           <Actions>
-            <button
-              type="button"
-              className="primary"
-              disabled={isLoading}
-            >
-              <span>👩‍🍳</span>
-              <strong>Iniciar produção</strong>
-            </button>
-
-            <button
-              type="button"
-              className="secondary"
-              onClick={onCancelOrder}
-              disabled={isLoading}
-            >
-              Cancelar pedido
-            </button>
+            {order.status !== 'DONE' ? (
+              <>
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={onChangeOrderStatus}
+                  disabled={isLoading}
+                >
+                  <span>
+                    {order.status === 'WAITING' && '👩‍🍳'}
+                    {order.status === 'IN_PRODUCTION' && '✅'}
+                  </span>
+                  <strong>
+                    {order.status === 'WAITING' && 'Iniciar produção'}
+                    {order.status === 'IN_PRODUCTION' && 'Concluir Pedido'}
+                  </strong>
+                </button>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={onCancelOrder}
+                >
+                  Cancelar pedido
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                className="secondary"
+                disabled={isLoading}
+                onClick={onCancelOrder}
+              >
+                <span>
+                  {order.status === 'DONE' && '🧹'}
+                </span>
+                <strong>
+                  {order.status === 'DONE' && 'Limpar pedido'}
+                </strong>
+              </button>
+            )}
           </Actions>
         </ModalBody>
       </Overlay>

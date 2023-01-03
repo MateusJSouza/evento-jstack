@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { api } from '../../utils/api';
@@ -13,9 +13,16 @@ interface OrderBoardProps {
   title: string;
   orders: Order[];
   onCancelOrder: (orderId: string) => void;
+  onChangeOrderStatus: (orderId: string, status: Order['status']) => void;
 }
 
-export function OrdersBoard({ icon, title, orders, onCancelOrder }: OrderBoardProps) {
+export function OrdersBoard({
+  icon,
+  title,
+  orders,
+  onCancelOrder,
+  onChangeOrderStatus
+}: OrderBoardProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<null | Order>(null); // null e Order são os únicos possíveis tipos desse estado
   const [isLoading, setIsLoading] = useState(false);
@@ -30,20 +37,42 @@ export function OrdersBoard({ icon, title, orders, onCancelOrder }: OrderBoardPr
     setSelectedOrder(null);
   }
 
-  async function handleCancelOrder() {
+  async function handleChangeOrderStatus() {
+    if (!selectedOrder) {
+      return;
+    }
+
     setIsLoading(true);
 
-    await api.delete(`/orders/${selectedOrder?._id}`);
+    const newStatus = selectedOrder.status === 'WAITING' ? 'IN_PRODUCTION' : 'DONE';
 
-    toast.success(`O pedido da mesa ${selectedOrder?.table} foi cancelado!`);
-    onCancelOrder(selectedOrder!._id);
+    await api.patch(`/orders/${selectedOrder._id}`, { status: newStatus });
+
+    toast.success(`O pedido da mesa ${selectedOrder.table} teve o status alterado com sucesso!`);
+    onChangeOrderStatus(selectedOrder._id, newStatus);
     setIsLoading(false);
     setIsModalVisible(false);
   }
 
-  useEffect(() => {
-    console.log('teste');
-  }, []);
+  async function handleCancelOrder() {
+    if (!selectedOrder) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    await api.delete(`/orders/${selectedOrder?._id}`);
+
+    if (selectedOrder.status === 'DONE' ?
+      toast.success(`O pedido da mesa ${selectedOrder?.table} foi limpo!`)
+      : (
+        toast.success(`O pedido da mesa ${selectedOrder?.table} foi cancelado!`)
+      )
+    )
+      onCancelOrder(selectedOrder._id);
+    setIsLoading(false);
+    setIsModalVisible(false);
+  }
 
   return (
     <Board>
@@ -53,6 +82,7 @@ export function OrdersBoard({ icon, title, orders, onCancelOrder }: OrderBoardPr
         onClose={handleCloseModal}
         onCancelOrder={handleCancelOrder}
         isLoading={isLoading}
+        onChangeOrderStatus={handleChangeOrderStatus}
       />
 
       <header>
